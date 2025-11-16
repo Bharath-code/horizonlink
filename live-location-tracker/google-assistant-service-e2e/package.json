@@ -1,0 +1,26 @@
+{
+  "name": "@live-location-tracker/google-assistant-service-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@live-location-tracker/google-assistant-service"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "google-assistant-service-e2e/jest.config.cts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "@live-location-tracker/google-assistant-service:build",
+          "@live-location-tracker/google-assistant-service:serve"
+        ]
+      }
+    }
+  }
+}

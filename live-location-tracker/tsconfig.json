@@ -1,0 +1,34 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./auth-service-e2e"
+    },
+    {
+      "path": "./auth-service"
+    },
+    {
+      "path": "./location-ingest-service-e2e"
+    },
+    {
+      "path": "./location-ingest-service"
+    },
+    {
+      "path": "./location-worker-service-e2e"
+    },
+    {
+      "path": "./location-worker-service"
+    },
+    {
+      "path": "./shared-auth"
+    },
+    {
+      "path": "./google-assistant-service-e2e"
+    },
+    {
+      "path": "./google-assistant-service"
+    }
+  ]
+}
