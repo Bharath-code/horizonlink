@@ -1,0 +1,76 @@
+---
+---
+<section class="py-16 sm:py-20" id="cta">
+  <div class="container mx-auto px-4">
+    <div class="bg-gradient-to-r from-primary to-purple-600 rounded-3xl p-10 sm:p-14 grid md:grid-cols-2 gap-8 items-center text-white shadow-2xl">
+      <div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 !leading-tight">Claim your invitation before the beta fills up</h2>
+        <p class="text-indigo-100 text-lg">Secure early access, help shape the roadmap, and lock in founder pricing for life.</p>
+      </div>
+      <form class="flex flex-col sm:flex-row gap-3" data-lead-capture data-source="cta-beta">
+        <input type="email" name="email" placeholder="Work or personal email" required class="flex-grow px-5 py-3 rounded-xl bg-white/20 text-white placeholder-white/70 border-none focus:outline-none focus:ring-2 focus:ring-white transition" />
+        <button type="submit" class="px-8 py-3 rounded-xl bg-white text-primary-dark font-semibold transition hover:bg-opacity-90">Request invite</button>
+      </form>
+      <p class="form-feedback form-feedback-light text-sm text-indigo-100" data-feedback-for="cta-beta" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const forms = document.querySelectorAll('[data-lead-capture]');
+    if (!forms.length) return;
+
+    forms.forEach((form) => {
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const email = formData.get('email');
+        const source = form.dataset.source || 'landing-beta';
+        const feedback = document.querySelector(`[data-feedback-for="${source}"]`);
+
+        if (feedback) {
+          feedback.textContent = '';
+          feedback.removeAttribute('data-status');
+        }
+
+        if (!email) {
+          if (feedback) {
+            feedback.textContent = 'Please enter a valid email address.';
+            feedback.setAttribute('data-status', 'error');
+          }
+          return;
+        }
+
+        form.classList.add('is-loading');
+
+        fetch('https://example.com/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, source }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            form.reset();
+            if (feedback) {
+              feedback.textContent = 'Thanks! You’re on the beta waitlist.';
+              feedback.setAttribute('data-status', 'success');
+            }
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ event: 'lead_capture', email, source });
+          })
+          .catch(() => {
+            if (feedback) {
+              feedback.textContent = 'Something went wrong. Please try again soon.';
+              feedback.setAttribute('data-status', 'error');
+            }
+          })
+          .finally(() => {
+            form.classList.remove('is-loading');
+          });
+      });
+    });
+  });
+</script>
