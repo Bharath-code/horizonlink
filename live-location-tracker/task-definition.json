@@ -1,0 +1,26 @@
+{
+  "family": "live-location-tracker-auth-service",
+  "containerDefinitions": [
+    {
+      "name": "live-location-tracker-auth-service",
+      "image": "YOUR_ECR_IMAGE_URI",
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "cpu": 256,
+      "memory": 512
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "networkMode": "awsvpc",
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "YOUR_EXECUTION_ROLE_ARN"
+}

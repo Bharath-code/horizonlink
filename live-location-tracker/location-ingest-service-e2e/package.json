@@ -1,0 +1,26 @@
+{
+  "name": "@live-location-tracker/location-ingest-service-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@live-location-tracker/location-ingest-service"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "location-ingest-service-e2e/jest.config.cts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "@live-location-tracker/location-ingest-service:build",
+          "@live-location-tracker/location-ingest-service:serve"
+        ]
+      }
+    }
+  }
+}
