@@ -1,0 +1,68 @@
+---
+import Card from "./ui/Card.astro";
+
+const features = [
+    {
+        title: "Real-time Tracking",
+        description:
+            "Track location with sub-second latency. Powered by WebSocket technology for instant updates.",
+        icon: "⚡",
+        class: "md:col-span-2",
+    },
+    {
+        title: "End-to-End Encryption",
+        description:
+            "Your location data is encrypted on the device and only decrypted by authorized viewers.",
+        icon: "🔒",
+        class: "md:col-span-1",
+    },
+    {
+        title: "Battery Efficient",
+        description:
+            "Optimized algorithms ensure minimal battery drain while maintaining high accuracy.",
+        icon: "🔋",
+        class: "md:col-span-1",
+    },
+    {
+        title: "Cross-Platform",
+        description:
+            "Works seamlessly on iOS, Android, and Web. Share links with anyone, anywhere.",
+        icon: "📱",
+        class: "md:col-span-2",
+    },
+];
+---
+
+<section id="features" class="py-24 relative overflow-hidden">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2
+                class="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-4"
+            >
+                Everything you need to <span class="text-primary"
+                    >stay connected</span
+                >
+            </h2>
+            <p class="text-lg text-muted max-w-2xl mx-auto">
+                Built for reliability, privacy, and performance. HorizonLink
+                gives you the tools to share your location with confidence.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {
+                features.map((feature) => (
+                    <Card class={feature.class}>
+                        <div class="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center text-2xl mb-4">
+                            {feature.icon}
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-2">
+                            {feature.title}
+                        </h3>
+                        <p class="text-muted">{feature.description}</p>
+                    </Card>
+                ))
+            }
+        </div>
+    </div>
+</section>

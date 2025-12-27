@@ -1,16 +1,29 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) { }
+
+  @Get()
+  getHealth() {
+    return {
+      service: 'google-assistant-service',
+      status: 'healthy',
+      message: 'Google Assistant webhook service is running'
+    };
+  }
 
   @Post('/webhook')
   handleWebhook(@Body() body: any) {
-    const userName = body.sessionInfo.parameters.userName;
+    // Extract user info from Dialogflow request
+    const userName = body?.sessionInfo?.parameters?.userName || 'User';
+
     // In a real application, you would query Redis for the user's location
-    const location = "New York, NY";
-    const eta = "15 minutes";
+    // For MVP, return mock data
+    const location = "Downtown, San Francisco";
+    const eta = "10 minutes";
+    const lastUpdated = new Date().toISOString();
 
     return {
       fulfillment_response: {
@@ -18,7 +31,7 @@ export class AppController {
           {
             text: {
               text: [
-                `${userName} is at ${location} and is approximately ${eta} away.`
+                `${userName} is at ${location} and is approximately ${eta} away. Last updated: ${lastUpdated}`
               ]
             }
           }

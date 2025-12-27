@@ -1,70 +1,68 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import * as AWS from 'aws-sdk';
-import Redis from 'ioredis';
-import { createConnection } from 'typeorm';
+import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { LocationGateway } from './location.gateway';
 
 @Injectable()
 export class LocationService implements OnModuleInit {
-  private readonly sqs: AWS.SQS;
-  private readonly redis: Redis;
-  private readonly db: any; // TypeORM connection
+  private readonly logger = new Logger(LocationService.name);
 
-  constructor(private readonly locationGateway: LocationGateway) {
-    this.sqs = new AWS.SQS({
-      region: 'us-east-1', // Will be replaced with env variable
-    });
+  // In-memory storage for MVP
+  private readonly latestLocations = new Map<string, any>();
+  private readonly locationHistory = new Map<string, any[]>();
 
-    this.redis = new Redis({
-      host: 'YOUR_REDIS_HOST', // Will be replaced with env variable
-      port: 6379,
-    });
-  }
+  constructor(private readonly locationGateway: LocationGateway) { }
 
   async onModuleInit() {
-    // This is a simplified example. In a real application, you would use TypeORM entities and repositories.
-    this.db = await createConnection({
-      type: 'postgres',
-      host: 'YOUR_POSTGRES_HOST', // Will be replaced with env variable
-      port: 5432,
-      username: 'admin',
-      password: 'password',
-      database: 'live_location_tracker',
-    });
-
-    this.pollMessages();
+    this.logger.log('Location Worker Service initialized (MVP mode - in-memory storage)');
+    this.logger.log('For production, configure PostgreSQL, Redis, and SQS');
   }
 
-  async pollMessages() {
-    while (true) {
-      const params = {
-        QueueUrl: 'YOUR_SQS_QUEUE_URL', // Will be replaced with env variable
-        MaxNumberOfMessages: 10,
-        WaitTimeSeconds: 20,
-      };
+  /**
+   * Process a location update
+   */
+  async processLocation(location: { userId: string; latitude: number; longitude: number; accuracy?: number }) {
+    const timestamp = Date.now();
+    const locationWithTimestamp = { ...location, timestamp };
 
-      const response = await this.sqs.receiveMessage(params).promise();
+    // Store latest location
+    this.latestLocations.set(location.userId, locationWithTimestamp);
 
-      if (response.Messages) {
-        for (const message of response.Messages) {
-          const location = JSON.parse(message.Body);
+    // Add to history
+    const history = this.locationHistory.get(location.userId) || [];
+    history.push(locationWithTimestamp);
 
-          // Store in Redis
-          await this.redis.set(`location:${location.userId}`, JSON.stringify(location));
-
-          // Store in PostgreSQL
-          await this.db.query('INSERT INTO locations (userId, latitude, longitude) VALUES ($1, $2, $3)', [location.userId, location.latitude, location.longitude]);
-
-          // Send location update to connected clients
-          this.locationGateway.sendLocationUpdate(location);
-
-          // Delete message from queue
-          await this.sqs.deleteMessage({
-            QueueUrl: params.QueueUrl,
-            ReceiptHandle: message.ReceiptHandle,
-          }).promise();
-        }
-      }
+    // Keep only last 100 entries per user
+    if (history.length > 100) {
+      history.shift();
     }
+    this.locationHistory.set(location.userId, history);
+
+    // Send location update to connected WebSocket clients
+    this.locationGateway.sendLocationUpdate(locationWithTimestamp);
+
+    this.logger.log(`Location processed for user ${location.userId}: (${location.latitude}, ${location.longitude})`);
+
+    return { status: 'success', location: locationWithTimestamp };
+  }
+
+  /**
+   * Get latest location for a user
+   */
+  getLatestLocation(userId: string) {
+    return this.latestLocations.get(userId) || null;
+  }
+
+  /**
+   * Get location history for a user
+   */
+  getLocationHistory(userId: string, limit = 50) {
+    const history = this.locationHistory.get(userId) || [];
+    return history.slice(-limit);
+  }
+
+  /**
+   * Get all tracked users
+   */
+  getTrackedUsers() {
+    return Array.from(this.latestLocations.keys());
   }
 }

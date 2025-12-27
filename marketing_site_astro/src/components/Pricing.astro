@@ -1,25 +1,128 @@
 ---
+import Button from "./ui/Button.astro";
+
+const plans = [
+  {
+    name: "Free",
+    price: "$0",
+    period: "/forever",
+    description: "Perfect for personal use",
+    features: [
+      "Up to 3 devices",
+      "Real-time location sharing",
+      "24-hour history",
+      "Basic notifications",
+    ],
+    cta: "Get Started",
+    highlighted: false,
+  },
+  {
+    name: "Pro",
+    price: "$9",
+    period: "/month",
+    description: "For families and small teams",
+    features: [
+      "Up to 10 devices",
+      "30-day location history",
+      "Geofence alerts",
+      "Priority support",
+      "ETA notifications",
+      "Custom sharing links",
+    ],
+    cta: "Start Free Trial",
+    highlighted: true,
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    period: "",
+    description: "For large organizations",
+    features: [
+      "Unlimited devices",
+      "90-day location history",
+      "Advanced analytics",
+      "API access",
+      "SSO integration",
+      "Dedicated support",
+      "Custom SLA",
+    ],
+    cta: "Contact Sales",
+    highlighted: false,
+  },
+];
 ---
-<section class="py-20 bg-gray-100" id="pricing">
-  <div class="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
-    <div class="pricing-copy">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">Simple household pricing</h2>
-      <p class="text-muted text-lg mb-6">Start free, upgrade when you’re ready. One plan gives your household everything you need.</p>
-      <ul class="space-y-2 text-muted">
-        <li>✔ Unlimited sharers & receivers</li>
-        <li>✔ Full TV + voice integrations</li>
-        <li>✔ Geofences, automation, and 30-day timeline</li>
-      </ul>
+
+<section id="pricing" class="py-24 relative">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-4">
+        Simple, <span class="text-primary">transparent</span> pricing
+      </h2>
+      <p class="text-lg text-muted max-w-2xl mx-auto">
+        Choose the plan that fits your needs. Start free and upgrade anytime.
+      </p>
     </div>
-    <div class="bg-surface p-10 rounded-3xl shadow-card text-center">
-      <div class="text-lg font-semibold text-muted">Premium Household</div>
-      <div class="flex justify-center items-end gap-1 my-5">
-        <span class="text-2xl font-bold">$</span>
-        <span class="text-5xl font-bold leading-none">6.99</span>
-        <span class="text-base text-muted">/month</span>
-      </div>
-      <p class="text-muted mb-6">Save 2 months with yearly billing • 14-day free trial</p>
-      <a href="#cta" class="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-primary to-indigo-500 text-white font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all" data-track="pricing-cta">Join the beta waitlist</a>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {
+        plans.map((plan) => (
+          <div
+            class:list={[
+              "rounded-2xl border p-8 transition-all duration-300 hover:scale-[1.02]",
+              plan.highlighted
+                ? "border-primary bg-primary/5 shadow-soft relative"
+                : "border-border bg-surface/50 hover:border-primary/50",
+            ]}
+          >
+            {plan.highlighted && (
+              <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+                <span class="bg-primary text-white text-sm font-semibold px-4 py-1.5 rounded-full">
+                  Most Popular
+                </span>
+              </div>
+            )}
+
+            <div class="mb-6">
+              <h3 class="text-xl font-semibold text-white mb-2">{plan.name}</h3>
+              <p class="text-muted text-sm">{plan.description}</p>
+            </div>
+
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-white">{plan.price}</span>
+              <span class="text-muted">{plan.period}</span>
+            </div>
+
+            <ul class="space-y-3 mb-8">
+              {plan.features.map((feature) => (
+                <li class="flex items-center gap-3 text-muted">
+                  <svg
+                    class="w-5 h-5 text-primary flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            <Button
+              variant={plan.highlighted ? "primary" : "secondary"}
+              class="w-full"
+              href={plan.name === "Enterprise" ? "/contact" : "/signup"}
+            >
+              {plan.cta}
+            </Button>
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>

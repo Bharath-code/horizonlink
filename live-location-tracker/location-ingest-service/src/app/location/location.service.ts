@@ -12,12 +12,23 @@ export class LocationService {
     });
   }
 
-  async create(createLocationDto: CreateLocationDto) {
-    const params = {
-      MessageBody: JSON.stringify(createLocationDto),
-      QueueUrl: 'YOUR_SQS_QUEUE_URL', // Will be replaced with env variable
-    };
+  private latestLocations = new Map<string, any>();
 
-    return this.sqs.sendMessage(params).promise();
+  async create(createLocationDto: CreateLocationDto) {
+    console.log('Received location:', createLocationDto);
+    // Store in memory for Phase 3 testing
+    // In a real app, userId would come from the auth token
+    const userId = 'test-user';
+    this.latestLocations.set(userId, {
+      ...createLocationDto,
+      timestamp: Date.now(),
+      userId
+    });
+
+    return { status: 'success', data: createLocationDto };
+  }
+
+  async getLatestLocation(userId: string) {
+    return this.latestLocations.get(userId) || null;
   }
 }

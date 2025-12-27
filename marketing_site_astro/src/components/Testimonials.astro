@@ -1,21 +1,59 @@
 ---
+const testimonials = [
+  {
+    quote:
+      "HorizonLink has completely changed how we coordinate our delivery fleet. The real-time accuracy is unmatched.",
+    name: "Alex Chen",
+    role: "Logistics Manager",
+  },
+  {
+    quote:
+      "I use it to share my location with family during long runs. It gives them peace of mind and me freedom.",
+    name: "Sarah Miller",
+    role: "Marathon Runner",
+  },
+  {
+    quote:
+      "The battery usage is incredibly low compared to other apps. I can track all day without worrying.",
+    name: "David Park",
+    role: "Travel Vlogger",
+  },
+  {
+    quote:
+      "Simple, secure, and just works. The best location sharing app I've used in years.",
+    name: "Emily Wilson",
+    role: "Parent",
+  },
+];
 ---
-<section class="py-20 bg-gradient-to-r from-indigo-50 to-blue-50">
-  <div class="container mx-auto px-4">
-    <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Loved by families, commuters, and caregivers</h2>
-    <div class="grid md:grid-cols-3 gap-8 mt-10">
-      <article class="bg-surface p-8 rounded-2xl shadow-lg">
-        <p class="text-gray-800">“HorizonLink replaced our nightly check-in calls. My partner just glances at the TV to know I’m nearly home.”</p>
-        <span class="block mt-4 font-semibold text-muted">— Priya, San Francisco</span>
-      </article>
-      <article class="bg-surface p-8 rounded-2xl shadow-lg">
-        <p class="text-gray-800">“My dad checks the speaker instead of texting me while I’m driving. It keeps everyone calmer.”</p>
-        <span class="block mt-4 font-semibold text-muted">— Mike, Austin</span>
-      </article>
-      <article class="bg-surface p-8 rounded-2xl shadow-lg">
-        <p class="text-gray-800">“As a caregiver, I finally have a predictable way to know when clients arrive without nagging.”</p>
-        <span class="block mt-4 font-semibold text-muted">— Laila, Chicago</span>
-      </article>
+
+<section id="testimonials" class="py-24 bg-white/5 relative">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h2
+      class="text-3xl font-bold tracking-tight text-center text-white sm:text-4xl mb-16"
+    >
+      Trusted by <span class="text-accent">thousands</span>
+    </h2>
+
+    <div class="relative flex overflow-x-hidden group">
+      <div class="animate-scroll flex gap-6 whitespace-nowrap py-4">
+        {
+          [...testimonials, ...testimonials].map((testimonial) => (
+            <div class="w-[350px] flex-none rounded-2xl border border-white/10 bg-background p-6 shadow-lg">
+              <p class="text-muted mb-6 whitespace-normal">
+                "{testimonial.quote}"
+              </p>
+              <div class="flex items-center gap-3">
+                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-purple-500" />
+                <div>
+                  <p class="font-semibold text-white">{testimonial.name}</p>
+                  <p class="text-sm text-muted">{testimonial.role}</p>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </div>
 </section>

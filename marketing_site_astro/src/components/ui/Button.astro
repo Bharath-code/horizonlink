@@ -1,0 +1,47 @@
+---
+import { cn } from "@/lib/utils";
+
+interface Props {
+  variant?: "primary" | "secondary" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg";
+  class?: string;
+  href?: string;
+  [key: string]: any;
+}
+
+const {
+  variant = "primary",
+  size = "md",
+  class: className,
+  href,
+  ...rest
+} = Astro.props;
+
+const variants = {
+  primary: "bg-primary hover:bg-primary-dark text-white shadow-lg shadow-primary/25",
+  secondary: "bg-surface text-text border border-border hover:bg-muted/10",
+  outline: "border-2 border-primary text-primary hover:bg-primary/10",
+  ghost: "text-text hover:bg-muted/10",
+};
+
+const sizes = {
+  sm: "px-4 py-2 text-sm",
+  md: "px-6 py-3 text-base",
+  lg: "px-8 py-4 text-lg",
+};
+
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  href={href}
+  class={cn(
+    "inline-flex items-center justify-center rounded-full font-medium transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none",
+    variants[variant],
+    sizes[size],
+    className
+  )}
+  {...rest}
+>
+  <slot />
+</Tag>

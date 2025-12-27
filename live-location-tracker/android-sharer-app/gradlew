@@ -1,0 +1,25 @@
+#!/bin/sh
+
+##############################################################################
+#   Gradle start up script for POSIX
+##############################################################################
+
+APP_HOME=$(cd "$(dirname "$0")" && pwd -P)
+CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+
+# Determine the Java command to use
+if [ -n "$JAVA_HOME" ]; then
+    JAVACMD=$JAVA_HOME/bin/java
+else
+    JAVACMD=java
+fi
+
+# Download gradle-wrapper.jar if not present
+if [ ! -f "$CLASSPATH" ]; then
+    echo "Downloading Gradle Wrapper..."
+    mkdir -p "$APP_HOME/gradle/wrapper"
+    curl -fsSL -o "$CLASSPATH" \
+        "https://raw.githubusercontent.com/gradle/gradle/v7.5.1/gradle/wrapper/gradle-wrapper.jar"
+fi
+
+exec "$JAVACMD" -Xmx64m -Xms64m -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"

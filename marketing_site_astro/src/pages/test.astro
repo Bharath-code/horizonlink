@@ -1,0 +1,503 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="HorizonLink - API Test Console">
+    <div class="min-h-screen bg-background p-8">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-white mb-2">
+                🧪 API Test Console
+            </h1>
+            <p class="text-muted mb-8">
+                Test the HorizonLink API without Android Studio
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Pairing Section -->
+                <div class="bg-surface/50 border border-border rounded-2xl p-6">
+                    <h2
+                        class="text-xl font-semibold text-white mb-4 flex items-center gap-2"
+                    >
+                        🔗 Device Pairing
+                    </h2>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-muted mb-2"
+                                >User ID</label
+                            >
+                            <input
+                                type="text"
+                                id="userId"
+                                value="user-123"
+                                class="w-full bg-background border border-border rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none"
+                            />
+                        </div>
+
+                        <button
+                            id="generateCodeBtn"
+                            class="w-full bg-primary hover:bg-primary-dark text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                        >
+                            Generate Pairing Code
+                        </button>
+
+                        <div id="pairingResult" class="hidden">
+                            <div
+                                class="bg-background/50 rounded-lg p-4 text-center"
+                            >
+                                <p class="text-muted text-sm mb-1">
+                                    Pairing Code
+                                </p>
+                                <p
+                                    id="pairingCode"
+                                    class="text-4xl font-bold text-primary tracking-widest"
+                                >
+                                    ------
+                                </p>
+                                <p class="text-muted text-xs mt-2">
+                                    Expires in <span id="expiresIn">300</span>s
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-border">
+                        <h3 class="text-lg font-medium text-white mb-4">
+                            Verify Code (TV App Simulation)
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm text-muted mb-2"
+                                    >Enter Code</label
+                                >
+                                <input
+                                    type="text"
+                                    id="verifyCode"
+                                    placeholder="123456"
+                                    class="w-full bg-background border border-border rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label class="block text-sm text-muted mb-2"
+                                    >Device ID</label
+                                >
+                                <input
+                                    type="text"
+                                    id="deviceId"
+                                    value="fire-tv-001"
+                                    class="w-full bg-background border border-border rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none"
+                                />
+                            </div>
+                            <button
+                                id="verifyCodeBtn"
+                                class="w-full bg-accent hover:bg-accent/80 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                            >
+                                Verify & Pair Device
+                            </button>
+                            <div
+                                id="verifyResult"
+                                class="hidden text-sm p-3 rounded-lg"
+                            >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Section -->
+                <div class="bg-surface/50 border border-border rounded-2xl p-6">
+                    <h2
+                        class="text-xl font-semibold text-white mb-4 flex items-center gap-2"
+                    >
+                        📍 Location Sharing
+                    </h2>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-muted mb-2"
+                                    >Latitude</label
+                                >
+                                <input
+                                    type="number"
+                                    id="latitude"
+                                    value="12.9716"
+                                    step="0.0001"
+                                    class="w-full bg-background border border-border rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label class="block text-sm text-muted mb-2"
+                                    >Longitude</label
+                                >
+                                <input
+                                    type="number"
+                                    id="longitude"
+                                    value="77.5946"
+                                    step="0.0001"
+                                    class="w-full bg-background border border-border rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm text-muted mb-2"
+                                >User ID (sharer)</label
+                            >
+                            <input
+                                type="text"
+                                id="locationUserId"
+                                value="user-123"
+                                class="w-full bg-background border border-border rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none"
+                            />
+                        </div>
+
+                        <button
+                            id="useMyLocation"
+                            class="w-full bg-surface border border-border hover:border-primary text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                        >
+                            📍 Use My Current Location
+                        </button>
+
+                        <button
+                            id="sendLocationBtn"
+                            class="w-full bg-primary hover:bg-primary-dark text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                        >
+                            Send Location Update
+                        </button>
+
+                        <div
+                            id="locationResult"
+                            class="hidden text-sm p-3 rounded-lg bg-green-500/20 text-green-400"
+                        >
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-border">
+                        <h3 class="text-lg font-medium text-white mb-4">
+                            Get Location (TV App View)
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm text-muted mb-2"
+                                    >Track User ID</label
+                                >
+                                <input
+                                    type="text"
+                                    id="trackUserId"
+                                    value="user-123"
+                                    class="w-full bg-background border border-border rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none"
+                                />
+                            </div>
+                            <button
+                                id="getLocationBtn"
+                                class="w-full bg-accent hover:bg-accent/80 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                            >
+                                Get Latest Location
+                            </button>
+
+                            <div id="trackResult" class="hidden">
+                                <div class="bg-background/50 rounded-lg p-4">
+                                    <div
+                                        class="grid grid-cols-2 gap-4 text-center"
+                                    >
+                                        <div>
+                                            <p class="text-muted text-xs">
+                                                Latitude
+                                            </p>
+                                            <p
+                                                id="resultLat"
+                                                class="text-xl font-mono text-white"
+                                            >
+                                                --
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="text-muted text-xs">
+                                                Longitude
+                                            </p>
+                                            <p
+                                                id="resultLng"
+                                                class="text-xl font-mono text-white"
+                                            >
+                                                --
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 text-center">
+                                        <p class="text-muted text-xs">
+                                            Last Updated
+                                        </p>
+                                        <p
+                                            id="resultTime"
+                                            class="text-sm text-white"
+                                        >
+                                            --
+                                        </p>
+                                    </div>
+                                    <a
+                                        id="mapLink"
+                                        href="#"
+                                        target="_blank"
+                                        class="mt-4 block text-center text-primary hover:underline text-sm"
+                                    >
+                                        🗺️ Open in Google Maps
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Log -->
+            <div
+                class="mt-8 bg-surface/50 border border-border rounded-2xl p-6"
+            >
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-white">📋 API Log</h2>
+                    <button
+                        id="clearLog"
+                        class="text-sm text-muted hover:text-white"
+                        >Clear</button
+                    >
+                </div>
+                <div
+                    id="apiLog"
+                    class="bg-background rounded-lg p-4 h-48 overflow-y-auto font-mono text-sm"
+                >
+                    <p class="text-muted">API requests will appear here...</p>
+                </div>
+            </div>
+
+            <p class="text-center text-muted text-sm mt-8">
+                Backend: <code class="text-primary"
+                    >http://localhost:3000/api</code
+                >
+            </p>
+        </div>
+    </div>
+</Layout>
+
+<script>
+    const API_BASE = "http://localhost:3000/api";
+    const logEl = document.getElementById("apiLog");
+
+    function log(
+        method: string,
+        endpoint: string,
+        data: any,
+        response: any,
+        isError = false,
+    ) {
+        const time = new Date().toLocaleTimeString();
+        const color = isError ? "text-red-400" : "text-green-400";
+        const entry = document.createElement("div");
+        entry.className = "mb-2 pb-2 border-b border-border/50";
+        entry.innerHTML = `
+      <span class="text-muted">[${time}]</span>
+      <span class="text-accent">${method}</span>
+      <span class="text-white">${endpoint}</span>
+      ${data ? `<br><span class="text-muted">→ ${JSON.stringify(data)}</span>` : ""}
+      <br><span class="${color}">← ${JSON.stringify(response)}</span>
+    `;
+        logEl?.prepend(entry);
+    }
+
+    // Generate Pairing Code
+    document
+        .getElementById("generateCodeBtn")
+        ?.addEventListener("click", async () => {
+            const userId = (
+                document.getElementById("userId") as HTMLInputElement
+            ).value;
+            try {
+                const res = await fetch(`${API_BASE}/pairing/code`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userId }),
+                });
+                const data = await res.json();
+                log("POST", "/pairing/code", { userId }, data);
+
+                if (data.code) {
+                    document
+                        .getElementById("pairingResult")
+                        ?.classList.remove("hidden");
+                    document.getElementById("pairingCode")!.textContent =
+                        data.code;
+                    document.getElementById("expiresIn")!.textContent =
+                        data.expiresIn;
+                    (
+                        document.getElementById(
+                            "verifyCode",
+                        ) as HTMLInputElement
+                    ).value = data.code;
+                }
+            } catch (e: any) {
+                log(
+                    "POST",
+                    "/pairing/code",
+                    { userId },
+                    { error: e.message },
+                    true,
+                );
+            }
+        });
+
+    // Verify Code
+    document
+        .getElementById("verifyCodeBtn")
+        ?.addEventListener("click", async () => {
+            const code = (
+                document.getElementById("verifyCode") as HTMLInputElement
+            ).value;
+            const deviceId = (
+                document.getElementById("deviceId") as HTMLInputElement
+            ).value;
+            const resultEl = document.getElementById("verifyResult")!;
+
+            try {
+                const res = await fetch(`${API_BASE}/pairing/verify`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ code, deviceId }),
+                });
+                const data = await res.json();
+                log(
+                    "POST",
+                    "/pairing/verify",
+                    { code, deviceId },
+                    data,
+                    !res.ok,
+                );
+
+                resultEl.classList.remove("hidden");
+                if (res.ok) {
+                    resultEl.className =
+                        "text-sm p-3 rounded-lg bg-green-500/20 text-green-400";
+                    resultEl.textContent = `✅ Paired! User: ${data.userId}, Token: ${data.token}`;
+                } else {
+                    resultEl.className =
+                        "text-sm p-3 rounded-lg bg-red-500/20 text-red-400";
+                    resultEl.textContent = `❌ ${data.message}`;
+                }
+            } catch (e: any) {
+                log(
+                    "POST",
+                    "/pairing/verify",
+                    { code, deviceId },
+                    { error: e.message },
+                    true,
+                );
+            }
+        });
+
+    // Use My Location
+    document.getElementById("useMyLocation")?.addEventListener("click", () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    (
+                        document.getElementById("latitude") as HTMLInputElement
+                    ).value = pos.coords.latitude.toFixed(6);
+                    (
+                        document.getElementById("longitude") as HTMLInputElement
+                    ).value = pos.coords.longitude.toFixed(6);
+                },
+                (err) => {
+                    alert("Could not get location: " + err.message);
+                },
+            );
+        }
+    });
+
+    // Send Location
+    document
+        .getElementById("sendLocationBtn")
+        ?.addEventListener("click", async () => {
+            const latitude = parseFloat(
+                (document.getElementById("latitude") as HTMLInputElement).value,
+            );
+            const longitude = parseFloat(
+                (document.getElementById("longitude") as HTMLInputElement)
+                    .value,
+            );
+            const userId = (
+                document.getElementById("locationUserId") as HTMLInputElement
+            ).value;
+            const resultEl = document.getElementById("locationResult")!;
+
+            try {
+                const res = await fetch(`${API_BASE}/location`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        latitude,
+                        longitude,
+                        accuracy: 10,
+                        userId,
+                    }),
+                });
+                const data = await res.json();
+                log("POST", "/location", { latitude, longitude, userId }, data);
+
+                resultEl.classList.remove("hidden");
+                resultEl.textContent = `✅ Location sent! Timestamp: ${new Date(data.data.timestamp).toLocaleString()}`;
+            } catch (e: any) {
+                log(
+                    "POST",
+                    "/location",
+                    { latitude, longitude, userId },
+                    { error: e.message },
+                    true,
+                );
+            }
+        });
+
+    // Get Location
+    document
+        .getElementById("getLocationBtn")
+        ?.addEventListener("click", async () => {
+            const userId = (
+                document.getElementById("trackUserId") as HTMLInputElement
+            ).value;
+
+            try {
+                const res = await fetch(`${API_BASE}/location/${userId}`);
+                const data = await res.json();
+                log("GET", `/location/${userId}`, null, data);
+
+                if (data) {
+                    document
+                        .getElementById("trackResult")
+                        ?.classList.remove("hidden");
+                    document.getElementById("resultLat")!.textContent =
+                        data.latitude?.toFixed(6) || "--";
+                    document.getElementById("resultLng")!.textContent =
+                        data.longitude?.toFixed(6) || "--";
+                    document.getElementById("resultTime")!.textContent =
+                        data.timestamp
+                            ? new Date(data.timestamp).toLocaleString()
+                            : "--";
+                    (
+                        document.getElementById("mapLink") as HTMLAnchorElement
+                    ).href =
+                        `https://www.google.com/maps?q=${data.latitude},${data.longitude}`;
+                }
+            } catch (e: any) {
+                log(
+                    "GET",
+                    `/location/${userId}`,
+                    null,
+                    { error: e.message },
+                    true,
+                );
+            }
+        });
+
+    // Clear Log
+    document.getElementById("clearLog")?.addEventListener("click", () => {
+        logEl!.innerHTML =
+            '<p class="text-muted">API requests will appear here...</p>';
+    });
+</script>

@@ -18,12 +18,29 @@ class MainActivity : ComponentActivity() {
         setContent {
             LiveLocationTrackerTvTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
+                Surface(color = MaterialTheme.colors.background) { AppNavigation() }
             }
         }
     }
+}
+
+@Composable
+fun AppNavigation() {
+    var currentScreen by remember { mutableStateOf<Screen>(Screen.Pairing) }
+
+    when (val screen = currentScreen) {
+        is Screen.Pairing -> {
+            CodeEntryScreen(onPairingSuccess = { userId -> currentScreen = Screen.Map(userId) })
+        }
+        is Screen.Map -> {
+            MapScreen(userId = screen.userId)
+        }
+    }
+}
+
+sealed class Screen {
+    object Pairing : Screen()
+    data class Map(val userId: String) : Screen()
 }
 
 @Composable
@@ -34,7 +51,5 @@ fun Greeting(name: String) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    LiveLocationTrackerTvTheme {
-        Greeting("Android")
-    }
+    LiveLocationTrackerTvTheme { Greeting("Android") }
 }

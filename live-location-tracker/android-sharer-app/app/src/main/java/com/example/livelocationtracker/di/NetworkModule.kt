@@ -1,13 +1,15 @@
 package com.example.livelocationtracker.di
 
 import com.example.livelocationtracker.network.AuthApiService
+import com.example.livelocationtracker.network.LocationApiService
+import com.example.livelocationtracker.network.PairingApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -17,9 +19,9 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://YOUR_API_GATEWAY_URL/") // Will be replaced with env variable
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+                .baseUrl("https://94d59ebbc374.ngrok-free.app/") // Public ngrok URL
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
     }
 
     @Provides
@@ -32,5 +34,11 @@ object NetworkModule {
     @Singleton
     fun provideLocationApiService(retrofit: Retrofit): LocationApiService {
         return retrofit.create(LocationApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePairingApiService(retrofit: Retrofit): PairingApiService {
+        return retrofit.create(PairingApiService::class.java)
     }
 }
